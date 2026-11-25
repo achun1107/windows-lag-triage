@@ -80,6 +80,15 @@ powershell -ExecutionPolicy Bypass -File .\scripts\Release-Memory.ps1
 
 把整个目录放到 `~/.dsh/skills/windows-lag-triage/`（Windows: `%USERPROFILE%\.dsh\skills\windows-lag-triage\`），DSH 会自动加载，技能名为 `windows-lag-triage`。`SKILL.md` 是给 agent 的执行说明，`scripts/` 是它调用的工具。
 
+## 故障排查
+
+| 现象 | 原因 | 处理 |
+|---|---|---|
+| `git push` 报 `Failed to connect to 127.0.0.1:7890` | git 全局配了 HTTP 代理但代理没启动 | `git -c http.proxy= -c https.proxy= push`（或临时清掉 `git config --global http.proxy`） |
+| PowerShell 报 `UnexpectedToken` 且脚本"什么都没做" | `.ps1` 无 BOM 且含非 ASCII，PS 5.1 按 OEM 代码页解析 | 保持脚本纯 ASCII，或存成 UTF-8 **带 BOM** |
+| `Apply-SafeFixes.ps1` 提权后没有输出 | 提权进程的输出不在当前控制台 | 看 `%TEMP%\windows-lag-triage\apply.log` |
+| 修完仍然卡 | 事件 129 继续增长 / 提交内存顶到物理内存 | 换带 DRAM 缓存的盘 / 加内存，见上文 |
+
 ## 许可
 
 MIT，见 `LICENSE`。
