@@ -1,0 +1,9 @@
+# logs and local artifacts
+*.log
+%TEMP%
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+desktop.ini
